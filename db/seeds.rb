@@ -1,12 +1,10 @@
 # Create Users
 User.create!(
-  name: "John Doe",
   email: "john@example.com",
   password: "password"
 )
 
 User.create!(
-  name: "Jane Smith",
   email: "jane@example.com",
   password: "password"
 )

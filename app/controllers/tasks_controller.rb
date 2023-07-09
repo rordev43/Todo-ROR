@@ -18,8 +18,6 @@ class TasksController < ApplicationController
     else
       render :new
     end
-
-    turbo_stream_from @task
   end
 
   def edit

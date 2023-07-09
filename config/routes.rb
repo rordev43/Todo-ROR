@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :users, only: [:show] do
-    resources :tasks, except: [:index, :show] do
+  # resources :users, only: [:show] do
+    resources :tasks do
       patch :complete, on: :member
       patch :uncomplete, on: :member
     end
-  end
+  # end
 
-  root to: 'users#show'
+  root "tasks#index"
 end

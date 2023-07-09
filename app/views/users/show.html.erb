@@ -1,19 +1,23 @@
 <h1>Welcome, <%= @user.name %></h1>
 
 <h2>Your Tasks</h2>
-<% @tasks.each do |task| %>
-  <div>
-    <strong>Description:</strong> <%= task.description %>
-    <strong>Completed:</strong> <%= task.completed ? 'Yes' : 'No' %>
-    <%= link_to 'Edit', edit_user_task_path(@user, task) %>
-    <%= button_to 'Delete', user_task_path(@user, task), method: :delete, data: { confirm: 'Are you sure?' } %>
-    <% if task.completed %>
-      <%= button_to 'Mark as Incomplete', uncomplete_user_task_path(@user, task), method: :patch %>
-    <% else %>
-      <%= button_to 'Mark as Complete', complete_user_task_path(@user, task), method: :patch %>
-    <% end %>
-  </div>
+<%= turbo_frame_tag 'tasks-frame' do %>
+  <% @tasks.each do |task| %>
+    <div>
+      <strong>Description:</strong> <%= task.description %>
+      <strong>Completed:</strong> <%= task.completed ? 'Yes' : 'No' %>
+      <%= link_to 'Edit', edit_user_task_path(@user, task) %>
+      <%= button_to 'Delete', user_task_path(@user, task), method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% if task.completed %>
+        <%= button_to 'Mark as Incomplete', uncomplete_user_task_path(@user, task), method: :patch %>
+      <% else %>
+        <%= button_to 'Mark as Complete', complete_user_task_path(@user, task), method: :patch %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
 
 <h2>New Task</h2>
-<%= render 'tasks/form', task: @task %>
+<%= turbo_frame_tag 'new-task-frame' do %>
+  <%= render 'tasks/form', task: @task %>
+<% end %>

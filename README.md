@@ -34,9 +34,13 @@ Before you get started, the following needs to be installed:
 3.  Setup tailwind by running the commands from your root of application:
     ```bash
     npm install -D tailwindcss
+    ```
 
+    ```bash
     npx tailwindcss init
+    ```
 
+    ```bash
     npx tailwindcss -i app/assets/stylesheets/application.css -o app/assets/stylesheets/wind.css --watch
     ```
    

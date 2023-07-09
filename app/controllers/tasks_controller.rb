@@ -1,86 +1,68 @@
 class TasksController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_user
-  before_action :set_task, except: [:index, :new, :create]
-  before_action :authorize_task, except: [:index, :new, :create]
+  before_action :set_task, only: [:edit, :toggle, :update, :destroy]
+  before_action :authorize_task, only: [:update, :toggle, :destroy]
 
   def index
-    @tasks = filter_tasks.page(params[:page]).per(10)
+    @tasks = current_user.tasks
+    @tasks = @tasks.search_by_description(params[:query]) if params[:query].present?
+    
+    @tasks = @tasks.page(params[:page]).per(5)
     @task = Task.new
-    authorize Task
+    authorize @tasks
   end
 
   def new
-    @task = @user.tasks.build
+    @task = current_user.tasks.new
     authorize @task
   end
 
   def create
-    @task = @user.tasks.build(task_params)
+    @task = current_user.tasks.new(task_params)
     authorize @task
-
-    if @task.save
-      redirect_to tasks_path, notice: 'Task created successfully.'
-    else
-      render :new
+    respond_to do |format|
+      if @task.save
+        format.html { redirect_to tasks_url, notice: "Task was successfully created" }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
+  end
+
+  def toggle
+    @task.update(completed: params[:completed])
+  
+    render json: { message: "Success" }
   end
 
   def edit
   end
 
   def update
-    if @task.update(task_params)
-      redirect_to tasks_path, notice: 'Task updated successfully.'
-    else
-      render :edit
+    respond_to do |format|
+      if @task.update(task_params)
+        format.html { redirect_to tasks_url, notice: "Task was successfully updated" }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     if @task.destroy
-      redirect_to tasks_path, notice: 'Task deleted successfully.'
+      redirect_to tasks_url, notice: "Post was successfully deleted."
     else
-      redirect_to tasks_path, alert: 'Failed to delete task.'
-    end
-  end
-
-  def complete
-    if @task.update(completed: true)
-      redirect_to tasks_path, notice: 'Task marked as complete.'
-    else
-      redirect_to tasks_path, alert: 'Failed to mark task as complete.'
-    end
-  end
-
-  def uncomplete
-    if @task.update(completed: false)
-      redirect_to tasks_path, notice: 'Task marked as incomplete.'
-    else
-      redirect_to tasks_path, alert: 'Failed to mark task as incomplete.'
+      redirect_to tasks_url, notice: "Something went wrong"
     end
   end
 
   private
 
-  def set_user
-    @user = current_user
-  end
-
   def set_task
-    @task = @user.tasks.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
   end
 
   def authorize_task
     authorize @task
-  end
-
-  def filter_tasks
-    if params[:search].present?
-      @user.tasks.where("description LIKE ?", "%#{params[:search]}%")
-    else
-      @user.tasks
-    end
   end
 
   def task_params

@@ -14,12 +14,12 @@ class TaskPolicy < ApplicationPolicy
   def destroy?
     user_owner?
   end
-
-  def complete?
+  
+  def toggle?
     user_owner?
-  end
+  end 
 
-  def uncomplete?
+  def edit
     user_owner?
   end
 

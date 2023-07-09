@@ -13,6 +13,7 @@
   </head>
 
   <body>
+    <%=render "layouts/navbar" %>
     <div id="flash-messages">
       <% flash.each do |key, value| %>
         <div class="alert <%= key %>">
@@ -20,9 +21,6 @@
         </div>
       <% end %>
     </div>
-
-    <%= turbo_frame_tag 'turbo-stream' %>
-    <%=render "layouts/navbar" %>
     <%= yield %>
   </body>
 </html>

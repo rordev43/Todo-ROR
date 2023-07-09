@@ -128,31 +128,4 @@ RSpec.describe TasksController, type: :controller do
       expect(response).to redirect_to(tasks_path)
     end
   end
-
-  describe 'PATCH #complete' do
-    it 'marks the task as completed' do
-      patch :complete, params: { id: task.id }
-      task.reload
-      expect(task.completed).to be_truthy
-    end
-
-    it 'redirects to the tasks index' do
-      patch :complete, params: { id: task.id }
-      expect(response).to redirect_to(tasks_path)
-    end
-  end
-
-  describe 'PATCH #uncomplete' do
-    it 'marks the task as uncompleted' do
-      task.update(completed: true)
-      patch :uncomplete, params: { id: task.id }
-      task.reload
-      expect(task.completed).to be_falsey
-    end
-
-    it 'redirects to the tasks index' do
-      patch :uncomplete, params: { id: task.id }
-      expect(response).to redirect_to(tasks_path)
-    end
-  end
 end

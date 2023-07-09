@@ -1,5 +1,7 @@
 class User < ApplicationRecord
+  has_many :tasks
   devise :database_authenticatable, :registerable, :validatable
 
-  has_many :tasks
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true
 end

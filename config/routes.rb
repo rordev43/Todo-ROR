@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :tasks do
     patch :complete, on: :member
     patch :uncomplete, on: :member
+    get :search, on: :collection
   end
 
   root "tasks#index"

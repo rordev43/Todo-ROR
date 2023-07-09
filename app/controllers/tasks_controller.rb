@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   before_action :authorize_task, except: [:index, :new, :create]
 
   def index
-    @tasks = @user.tasks
+    @tasks = filter_tasks
     @task = Task.new
     authorize Task
   end
@@ -73,6 +73,14 @@ class TasksController < ApplicationController
 
   def authorize_task
     authorize @task
+  end
+
+  def filter_tasks
+    if params[:search].present?
+      @user.tasks.where("description LIKE ?", "%#{params[:search]}%")
+    else
+      @user.tasks
+    end
   end
 
   def task_params

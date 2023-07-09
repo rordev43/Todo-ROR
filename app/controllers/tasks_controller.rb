@@ -2,13 +2,16 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user
   before_action :set_task, except: [:new, :create]
+  before_action :authorize_task, except: [:new, :create]
 
   def new
     @task = @user.tasks.build
+    authorize @task
   end
 
   def create
     @task = @user.tasks.build(task_params)
+    authorize @task
 
     if @task.save
       redirect_to user_path(@user), notice: 'Task created successfully.'
@@ -60,6 +63,10 @@ class TasksController < ApplicationController
 
   def set_task
     @task = @user.tasks.find(params[:id])
+  end
+
+  def authorize_task
+    authorize @task
   end
 
   def task_params

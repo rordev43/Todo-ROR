@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   before_action :authorize_task, except: [:index, :new, :create]
 
   def index
-    @tasks = filter_tasks
+    @tasks = filter_tasks.page(params[:page]).per(10)
     @task = Task.new
     authorize Task
   end

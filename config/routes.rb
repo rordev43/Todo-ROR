@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     patch :complete, on: :member
     patch :uncomplete, on: :member
     get :search, on: :collection
+    get '/page/:page', action: :index, on: :collection
   end
 
   root "tasks#index"

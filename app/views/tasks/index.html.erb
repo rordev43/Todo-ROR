@@ -26,6 +26,8 @@
   </div>
 <% end %>
 
+<%= paginate @tasks %>
+
 <h2>New Task</h2>
 <%= render 'tasks/form', task: @task %>
 <%= button_to 'Logout', destroy_user_session_path, method: :delete %>

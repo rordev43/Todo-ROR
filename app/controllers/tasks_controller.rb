@@ -1,8 +1,14 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user
-  before_action :set_task, except: [:new, :create]
-  before_action :authorize_task, except: [:new, :create]
+  before_action :set_task, except: [:index, :new, :create]
+  before_action :authorize_task, except: [:index, :new, :create]
+
+  def index
+    @tasks = @user.tasks
+    @task = Task.new
+    authorize Task
+  end
 
   def new
     @task = @user.tasks.build
@@ -14,7 +20,7 @@ class TasksController < ApplicationController
     authorize @task
 
     if @task.save
-      redirect_to user_path(@user), notice: 'Task created successfully.'
+      redirect_to tasks_path, notice: 'Task created successfully.'
     else
       render :new
     end
@@ -25,7 +31,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to user_path(@user), notice: 'Task updated successfully.'
+      redirect_to tasks_path, notice: 'Task updated successfully.'
     else
       render :edit
     end
@@ -33,25 +39,25 @@ class TasksController < ApplicationController
 
   def destroy
     if @task.destroy
-      redirect_to user_path(@user), notice: 'Task deleted successfully.'
+      redirect_to tasks_path, notice: 'Task deleted successfully.'
     else
-      redirect_to user_path(@user), alert: 'Failed to delete task.'
+      redirect_to tasks_path, alert: 'Failed to delete task.'
     end
   end
 
   def complete
     if @task.update(completed: true)
-      redirect_to user_path(@user), notice: 'Task marked as complete.'
+      redirect_to tasks_path, notice: 'Task marked as complete.'
     else
-      redirect_to user_path(@user), alert: 'Failed to mark task as complete.'
+      redirect_to tasks_path, alert: 'Failed to mark task as complete.'
     end
   end
 
   def uncomplete
     if @task.update(completed: false)
-      redirect_to user_path(@user), notice: 'Task marked as incomplete.'
+      redirect_to tasks_path, notice: 'Task marked as incomplete.'
     else
-      redirect_to user_path(@user), alert: 'Failed to mark task as incomplete.'
+      redirect_to tasks_path, alert: 'Failed to mark task as incomplete.'
     end
   end
 

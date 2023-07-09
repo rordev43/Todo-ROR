@@ -1,4 +1,8 @@
 class TaskPolicy < ApplicationPolicy
+  def index?
+    user.present?
+  end
+
   def create?
     user_owner?
   end

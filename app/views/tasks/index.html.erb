@@ -1,0 +1,20 @@
+<h1>Welcome, <%= current_user.email %></h1>
+
+<h2>Your Tasks</h2>
+<% @tasks.each do |task| %>
+  <div class="">
+    <strong>Description:</strong> <%= task.description %>
+    <strong>Completed:</strong> <%= task.completed ? 'Yes' : 'No' %>
+    <%= link_to 'Edit', edit_task_path(task) %>
+    <%= button_to 'Delete', task, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% if task.completed %>
+      <%= button_to 'Mark as Incomplete', uncomplete_task_path(task), method: :patch %>
+    <% else %>
+      <%= button_to 'Mark as Complete', complete_task_path(task), method: :patch %>
+    <% end %>
+  </div>
+<% end %>
+
+<h2>New Task</h2>
+<%= render 'tasks/form', task: @task %>
+<%= button_to 'Logout', destroy_user_session_path, method: :delete %>

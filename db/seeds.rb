@@ -16,7 +16,7 @@ users.each do |user|
   5.times do |n|
     Task.create!(
       user: user,
-      description: "Task #{n + 1} for #{user.name}",
+      description: "Task #{n + 1}",
       completed: [true, false].sample
     )
   end
